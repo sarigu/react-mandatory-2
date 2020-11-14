@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 
-const PORT = 4000;
+const PORT = 5000;
 
 
 
@@ -12,6 +12,22 @@ app.get("/", (req, res) => {
 
     console.log("works")
 });
+
+
+
+app.get("/signup", (req, res) => {
+  return res.redirect({ data: "something" });
+
+  
+});
+
+app.post("/random", (req, res) => {
+  return res.redirect({ data: "something" });
+  console.log("something");
+
+  
+});
+
 
 
 
