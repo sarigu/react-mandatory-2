@@ -6,22 +6,8 @@ var jsonParser = bodyParser.json();
 
 const PORT = 5000;
 
-const MongoClient = require('mongodb').MongoClient;
-
-const connectionUrl = "mongodb://localhost:27017";
-
-MongoClient.connect(connectionUrl, { useUnifiedTopology: true }, (error, client) => {
-  if (error) {
-    console.log(error);
-  }
-  const userDB = client.db("userDb");
-  const users = userDB.collection("users");
-
-  users.find().toArray((error, users) => {
-    console.log(users);
-    client.close();
-  });
-});
+const db = require("./db");
+const collection = "users";
 
 app.post('/createAccount', jsonParser, (req, res) => {
 
@@ -33,24 +19,14 @@ app.post('/createAccount', jsonParser, (req, res) => {
   }
 
   console.log(newUser);
-
-  MongoClient.connect(connectionUrl, { useUnifiedTopology: true }, (error, client) => {
-    if (error) {
-      console.log(error);
+  db.getDB().collection(collection).insertOne(newUser, (error, result) => {
+    console.log(result.ops[0]);
+    if (result.insertedCount === 1) {
+      console.log("new user");
+    } else {
+      throw new Error(error);
     }
-    const userDB = client.db("userDb");
-    const users = userDB.collection("users");
-
-    users.insertOne(newUser, (error, result) => {
-      console.log(result.ops[0]);
-      if (result.insertedCount === 1) {
-        client.close();
-      } else {
-        throw new Error(error);
-      }
-    });
   });
-
 
 })
 
