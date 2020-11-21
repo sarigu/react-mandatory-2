@@ -48,16 +48,12 @@ app.post('/login', async (req, res) => {
   try {
     user = await db.getDB().collection(collection).findOne({ email: req.body.email });
     console.log(user);
-  } catch (err) {
-    res.status(500).send()
-  }
 
-  if (user == null) {
-    //return res.status(400).send("cannot find user")
-    console.log("cannot find user");
-  }
+    if (user == null) {
+      //return res.status(400).send("cannot find user")
+      console.log("cannot find user");
+    }
 
-  try {
     if (await bcrypt.compare(req.body.password, user.password)) {
       //res.send("sucess")
       console.log("sucess");
@@ -65,9 +61,13 @@ app.post('/login', async (req, res) => {
       //res.send("not allowed")
       console.log("not allowed");
     }
-  } catch{
+
+  } catch (err) {
     res.status(500).send()
   }
+
+
+
 })
 
 app.listen(PORT, function () {
