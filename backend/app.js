@@ -14,7 +14,7 @@ app.post('/createAccount', jsonParser, (req, res) => {
   let newUser = {
     first_name: req.body.first_name,
     last_name: req.body.last_name,
-    email: req.body.email,
+    email: req.body.email, 
     password: req.body.password
   }
 
@@ -29,6 +29,16 @@ app.post('/createAccount', jsonParser, (req, res) => {
   });
 
 })
+
+app.get('/', (req, res) => {
+
+
+
+  db.getDB().collection(collection).find().toArray((error, collection) => {
+console.log(collection);
+  });
+
+});
 
 app.listen(PORT, function () {
   console.log("Server is running on Port: " + PORT);

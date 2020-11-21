@@ -15,8 +15,8 @@ export default function Login() {
 
   function handleSubmit(event) {
     event.preventDefault();
-    axios.post('/random'+ email ).then(response => {
-       console.log(email);
+    axios.post('/random').then(response => {
+       console.log("test");
     }
       );
 
