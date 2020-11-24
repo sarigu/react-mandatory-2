@@ -2,7 +2,7 @@ const express = require("express");
 const bodyParser = require('body-parser');
 const exphbs = require('express-handlebars');
 const nodemailer = require('nodemailer');
-const rateLimit = require('express-rate-limiter');
+const rateLimit = require('express-rate-limit');
 
 
 const app = express();
@@ -12,7 +12,7 @@ const bcrypt = require("bcrypt");
 
 app.use(express.json());
 
-app.use(limiter);
+
 
 const PORT = 5000;
 
@@ -133,7 +133,7 @@ app.get('/', (req, res) => {
   res.render('Hello');
 })
 
-
+app.use(limiter);
 
 app.listen(PORT, function () {
   console.log("Server is running on Port: " + PORT);
