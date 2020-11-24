@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require('body-parser');
 const exphbs = require('express-handlebars');
 const nodemailer = require('nodemailer');
+const rateLimit = require('express-rate-limiter');
 
 
 const app = express();
@@ -11,10 +12,21 @@ const bcrypt = require("bcrypt");
 
 app.use(express.json());
 
+app.use(limiter);
+
 const PORT = 5000;
 
 const db = require("./db");
 const collection = "users";
+
+
+const limiter = rateLimit( 
+  {
+windowMs : 15 * 60 * 1000,
+max: 100,
+message : "You have reached your IP limitation of accessing the page",
+  }
+)
 
 /*app.get('/', (req, res) => {
   db.getDB().collection(collection).find().toArray((error, collection) => {
@@ -120,6 +132,8 @@ console.log(collection);
 app.get('/', (req, res) => {
   res.render('Hello');
 })
+
+
 
 app.listen(PORT, function () {
   console.log("Server is running on Port: " + PORT);
