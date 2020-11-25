@@ -6,7 +6,7 @@ const bcrypt = require("bcrypt");
 var session = require('express-session');
 
 app.use(express.json());
-app.use(session({secret:"sas546ddasd546asd34asd",resave:false,saveUninitialized: true}))
+app.use(session({ secret: "sas546ddasd546asd34asd", resave: false, saveUninitialized: true }))
 
 const PORT = 5000;
 
@@ -68,7 +68,6 @@ app.post('/users', async (req, res) => {
     // Preview only available when sending through an Ethereal account
     console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
     // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
-
     main().catch(console.error);
 
   } catch{
@@ -81,19 +80,15 @@ app.post('/login', async (req, res) => {
     const user = await db.getDB().collection(collection).findOne({ email: req.body.email });
 
     if (user == null) {
-      //return res.status(400).send("cannot find user")
-      console.log("cannot find user");
+      return res.status(400).send("cannot find user")
     }
 
     if (await bcrypt.compare(req.body.password, user.password)) {
-      //res.send("sucess")
       req.session.user = user;
       req.session.email = user.email;
-      console.log(req.session.email);
-      console.log("success");
+      res.status(200).send("sucess")
     } else {
-      //res.send("not allowed")
-      console.log("not allowed");
+      res.status(401).send("not allowed")
     }
 
   } catch (err) {
@@ -101,12 +96,10 @@ app.post('/login', async (req, res) => {
   }
 })
 
-app.use(limiter);
-
 app.get('/logout', (req, res) => {
   console.log('logout clicked');
-  req.session.destroy(function(err) {
-    if(err) {
+  req.session.destroy(function (err) {
+    if (err) {
       console.log(err);
     } else {
       res.redirect('/');
@@ -116,14 +109,14 @@ app.get('/logout', (req, res) => {
 })
 
 app.get('/dashboard', (req, res) => {
-  if(!req.session.user){
+  if (!req.session.user) {
     return res.status(401).send();
   }
   return res.status(200).send('Welcome to session with key');
 })
 
 app.get('/test', (req, res) => {
-  if(req.session.user){
+  if (req.session.user) {
     console.log('logged');
   } else {
     console.log('not logged');
@@ -131,6 +124,8 @@ app.get('/test', (req, res) => {
   }
   return res.status(200).send('tested');
 })
+
+app.use(limiter);
 
 app.listen(PORT, function () {
   console.log("Server is running on Port: " + PORT);
