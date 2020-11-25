@@ -17,7 +17,7 @@ class App extends React.Component {
       password: password.value
     }
 
-    axios.post('/createAccount', newUser).then(response =>
+    axios.post('/users', newUser).then(response =>
       console.log("account created")
     );
   }
