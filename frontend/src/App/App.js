@@ -27,7 +27,7 @@ class App extends React.Component {
     const { email, password } = e.target;
     const user = { email: email.value, password: password.value };
     axios.post('/login', user).then(response =>
-      console.log("account login")
+      console.log(response)
     );
 
   }
