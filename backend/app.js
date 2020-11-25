@@ -61,9 +61,9 @@ app.post('/createAccount', async (req, res) => {
   let info = await transporter.sendMail({
     from: '"Fred Foo 👻" <foo@example.com>', // sender address
     to: req.body.email, // list of receivers
-    subject: "Hello ✔", // Subject line
-    text: "Hello world?", // plain text body
-    html: "<b>Hello world?</b>", // html body
+    subject: "Successfully created user", // Subject line
+    text: "Successfully created user", // plain text body
+
   });
 
   console.log("Message sent: %s", info.messageId);
