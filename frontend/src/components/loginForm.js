@@ -8,8 +8,6 @@ export default class LoginForm extends Component {
         <input type="password" name="password" placeholder="password" required></input>
         <button>Login</button>
       </form>
-
     );
-
   }
 }

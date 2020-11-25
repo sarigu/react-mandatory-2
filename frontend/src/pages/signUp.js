@@ -22,7 +22,6 @@ export default class SignUp extends Component {
         window.location = '/';
     }
 
-
     render() {
         return (
             <div>
@@ -31,6 +30,5 @@ export default class SignUp extends Component {
                 <Link to="/">Already have an account? Log in</Link>
             </div>
         );
-
     }
 }

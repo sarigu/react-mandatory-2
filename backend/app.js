@@ -115,17 +115,6 @@ app.get('/logout', (req, res) => {
   return res.status(200).send('Session destroyed');
 })
 
-
-app.get('/test', (req, res) => {
-  if (req.session.user) {
-    console.log('logged');
-  } else {
-    console.log('not logged');
-    console.log(req.session.email);
-  }
-  return res.status(200).send('tested');
-})
-
 app.use(limiter);
 
 app.listen(PORT, function () {

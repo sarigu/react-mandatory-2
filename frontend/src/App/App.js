@@ -3,6 +3,8 @@ import './App.css';
 import SignUp from '../pages/signup';
 import Login from '../pages/login';
 import Dashboard from '../pages/dashboard';
+import TestPage from '../pages/testPage';
+import AnotherTestPage from '../pages/anotherTestPage';
 import axios from 'axios';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
@@ -34,6 +36,12 @@ class App extends React.Component {
             </Route>
             <Route path="/dashboard" exact>
               <Dashboard isAuth={this.state.isAuthorized} />
+            </Route>
+            <Route path="/test" exact>
+              <TestPage isAuth={this.state.isAuthorized} />
+            </Route>
+            <Route path="/anothertest" exact>
+              <AnotherTestPage isAuth={this.state.isAuthorized} />
             </Route>
           </Switch>
         </div>
