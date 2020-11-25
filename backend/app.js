@@ -3,13 +3,16 @@ const nodemailer = require('nodemailer');
 const rateLimit = require('express-rate-limit');
 const app = express();
 const bcrypt = require("bcrypt");
+var session = require('express-session');
 
 app.use(express.json());
+app.use(session({secret:"sas546ddasd546asd34asd",resave:false,saveUninitialized: true}))
 
 const PORT = 5000;
 
 const db = require("./db");
 const collection = "users";
+
 
 const limiter = rateLimit(
   {
@@ -84,6 +87,9 @@ app.post('/login', async (req, res) => {
 
     if (await bcrypt.compare(req.body.password, user.password)) {
       //res.send("sucess")
+      req.session.user = user;
+      req.session.email = user.email;
+      console.log(req.session.email);
       console.log("success");
     } else {
       //res.send("not allowed")
@@ -96,6 +102,35 @@ app.post('/login', async (req, res) => {
 })
 
 app.use(limiter);
+
+app.get('/logout', (req, res) => {
+  console.log('logout clicked');
+  req.session.destroy(function(err) {
+    if(err) {
+      console.log(err);
+    } else {
+      res.redirect('/');
+    }
+  });
+  return res.status(200).send('Session destroyed');
+})
+
+app.get('/dashboard', (req, res) => {
+  if(!req.session.user){
+    return res.status(401).send();
+  }
+  return res.status(200).send('Welcome to session with key');
+})
+
+app.get('/test', (req, res) => {
+  if(req.session.user){
+    console.log('logged');
+  } else {
+    console.log('not logged');
+    console.log(req.session.email);
+  }
+  return res.status(200).send('tested');
+})
 
 app.listen(PORT, function () {
   console.log("Server is running on Port: " + PORT);
