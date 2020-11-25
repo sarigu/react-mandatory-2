@@ -34,10 +34,11 @@ app.post('/users', async (req, res) => {
       password: hashedPassword
     }
 
+    console.log(newUser);
+
     db.getDB().collection(collection).insertOne(newUser, (error, result) => {
-      console.log(result.ops[0]);
       if (result.insertedCount === 1) {
-        console.log("new user inserted");
+        res.status(200).send("user inserted");
       } else {
         throw new Error(error);
       }
@@ -78,17 +79,17 @@ app.post('/users', async (req, res) => {
 app.post('/login', async (req, res) => {
   try {
     const user = await db.getDB().collection(collection).findOne({ email: req.body.email });
-
     if (user == null) {
-      return res.status(400).send("cannot find user")
+      return res.status(400).send("cannot find user");
     }
 
     if (await bcrypt.compare(req.body.password, user.password)) {
       req.session.user = user;
       req.session.email = user.email;
-      res.status(200).send("sucess")
+      res.status(200).send("sucess");
+      console.log("sucess");
     } else {
-      res.status(401).send("not allowed")
+      res.status(401).send("not allowed");
     }
 
   } catch (err) {
@@ -96,24 +97,24 @@ app.post('/login', async (req, res) => {
   }
 })
 
-app.get('/logout', (req, res) => {
-  console.log('logout clicked');
-  req.session.destroy(function (err) {
-    if (err) {
-      console.log(err);
-    } else {
-      res.redirect('/');
-    }
-  });
-  return res.status(200).send('Session destroyed');
-})
-
-app.get('/dashboard', (req, res) => {
+app.get('/getSession', (req, res) => {
+  console.log(req.session.user)
   if (!req.session.user) {
     return res.status(401).send();
   }
   return res.status(200).send('Welcome to session with key');
 })
+
+app.get('/logout', (req, res) => {
+  console.log('logout clicked');
+  req.session.destroy(function (err) {
+    if (err) {
+      console.log(err);
+    }
+  });
+  return res.status(200).send('Session destroyed');
+})
+
 
 app.get('/test', (req, res) => {
   if (req.session.user) {

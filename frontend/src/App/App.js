@@ -1,35 +1,24 @@
 import React from 'react';
 import './App.css';
-import axios from 'axios';
 import SignUp from '../pages/signup';
 import Login from '../pages/login';
+import Dashboard from '../pages/dashboard';
+import axios from 'axios';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 class App extends React.Component {
+  constructor() {
+    super();
 
-  handleSignUp = (e) => {
-    e.preventDefault();
-    const { first_name, last_name, email, password } = e.target;
-    const newUser = {
-      first_name: first_name.value,
-      last_name: last_name.value,
-      email: email.value,
-      password: password.value
+    this.state = {
+      isAuthorized: "false",
     }
-
-    axios.post('/users', newUser).then(response =>
-      console.log("account created")
-    );
   }
 
-  handleLogin = (e) => {
-    e.preventDefault();
-    const { email, password } = e.target;
-    const user = { email: email.value, password: password.value };
-    axios.post('/login', user).then(response =>
-      console.log(response)
+  componentDidMount = () => {
+    axios.get('/getSession').then(response =>
+      response.status === 200 ? this.setState({ isAuthorized: "true" }) : this.setState({ isAuthorized: "false" })
     );
-
   }
 
   render() {
@@ -38,10 +27,13 @@ class App extends React.Component {
         <div>
           <Switch>
             <Route path="/" exact>
-              <Login onLogin={this.handleLogin}></Login>
+              <Login></Login>
             </Route>
             <Route path="/signup" exact>
               <SignUp onCreateAccount={this.handleSignUp} />
+            </Route>
+            <Route path="/dashboard" exact>
+              <Dashboard isAuth={this.state.isAuthorized} />
             </Route>
           </Switch>
         </div>
